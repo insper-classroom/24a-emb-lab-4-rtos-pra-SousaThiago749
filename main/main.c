@@ -77,12 +77,10 @@ void oled_task(void *p) {
     printf("Inicializando btn and LEDs\n");
     oled1_btn_led_init();
 
-    char cnt = 15;
     while (1) {
         float distance;
-        char distance_str[20];
         if ((xSemaphoreTake(xSemaphore_trigger, pdMS_TO_TICKS(100)) == pdTRUE) ){
-
+            char distance_str[20];
             if (xQueueReceive(xQueue_distance, &distance, pdMS_TO_TICKS(50))){
                     gfx_clear_buffer(&disp);
                     snprintf(distance_str, sizeof(distance_str), "%.2f", distance);
