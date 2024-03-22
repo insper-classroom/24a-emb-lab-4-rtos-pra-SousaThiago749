@@ -102,8 +102,8 @@ void oled_task(void *p) {
 
 //DISTANCIA E TIMER
 void pin_callback(uint gpio, uint32_t events) {
-    static uint64_t start_time;
-    static uint64_t end_time;
+    static int start_time;
+    static int end_time;
     if (gpio == ECHO_PIN) {
         if (gpio_get(ECHO_PIN)) {
             // ECHO_PIN mudou para alto
