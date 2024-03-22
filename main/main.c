@@ -118,22 +118,34 @@ void oled_task(void *p) {
 //     }
 // }
 
-void pin_callback(uint gpio, uint32_t events) {
-    if (gpio == ECHO_PIN) {
-        static uint32_t start_time; // Mover a declaração para dentro do bloco condicional
-        static uint32_t end_time;   // Mover a declaração para dentro do bloco condicional
+// void pin_callback(uint gpio, uint32_t events) {
+//     static uint32_t echo_rise_time, echo_fall_time, dt;
+//     if (events == 0x8) {
+//         if (gpio == ECHO_PIN) {
+//             echo_rise_time = to_us_since_boot(get_absolute_time());
+//         } else if (events == 0x4) {
+//             if (gpio == ECHO_PIN) {
+//                 echo_fall_time = to_us_since_boot(get_absolute_time());
+//                 dt = echo_fall_time-echo_rise_time;
+//                 xQueueSendFromISR(xQueue_time, &dt, 0);
+//             }
+//         }
+//     }
+// }
 
-        if (gpio_get(ECHO_PIN)) {
-            // ECHO_PIN mudou para alto
-            start_time = to_us_since_boot(get_absolute_time());
-        } else {
-            // ECHO_PIN mudou para baixo
-            end_time = to_us_since_boot(get_absolute_time());
-            
-            uint64_t duration = end_time - start_time;
-            xQueueSendFromISR(xQueue_time, &duration, 0);
+void pin_callback(uint gpio, uint32_t events) {
+    static uint32_t echo_rise_time, echo_fall_time, dt;
+    if(events == 0x8) {  // rise edge
+        if (gpio == ECHO_PIN) {
+            echo_rise_time = to_us_since_boot(get_absolute_time());
         }
-    }
+    } else if (events == 0x4) { // fall edge
+        if (gpio == ECHO_PIN) {
+            echo_fall_time = to_us_since_boot(get_absolute_time());
+            dt = echo_fall_time-echo_rise_time;
+            xQueueSendFromISR(xQueue_time, &dt, 0);
+        }
+    } 
 }
 
 
