@@ -31,8 +31,8 @@ int SOUND_SPEED = 340;
 // volatile absolute_time_t start_time;
 // volatile absolute_time_t end_time;
 
-uint64_t start_time;
-uint64_t end_time;
+volatile uint64_t start_time;
+volatile uint64_t end_time;
 
 
 // criando uma fila
