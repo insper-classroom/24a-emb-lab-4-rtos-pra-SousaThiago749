@@ -91,6 +91,11 @@ void oled_task(void *p) {
                     gfx_draw_line(&disp, 15, 27, distance, 27);
                     gfx_show(&disp);
                     vTaskDelay(pdMS_TO_TICKS(50));
+            }else{
+                gfx_clear_buffer(&disp);
+                gfx_draw_string(&disp, 0, 0, 1, "Sem distancia");
+                gfx_show(&disp);
+                vTaskDelay(pdMS_TO_TICKS(50));
             }
             
         }
